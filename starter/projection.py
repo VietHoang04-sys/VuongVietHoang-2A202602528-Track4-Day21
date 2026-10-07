@@ -32,7 +32,9 @@ def velo_to_cam(points_xyz: np.ndarray, calib: KittiCalib) -> np.ndarray:
       3. Trả về 3 cột đầu.
     Tự kiểm: một điểm velodyne (10, 0, 0) phải có z_cam ~ 10 (phía trước camera).
     """
-    raise NotImplementedError("TODO(CP2): cài đặt velo_to_cam")
+    pts_hom = np.hstack([points_xyz, np.ones((points_xyz.shape[0], 1), dtype=points_xyz.dtype)])
+    pts_cam = (calib.T_cam_velo @ pts_hom.T).T
+    return pts_cam[:, :3]
 
 
 def cam_to_image(points_cam: np.ndarray, P2: np.ndarray, image_shape: tuple[int, ...],
@@ -52,7 +54,34 @@ def cam_to_image(points_cam: np.ndarray, P2: np.ndarray, image_shape: tuple[int,
       3. Chia cho s để có (u, v). Chỉ chia với điểm có depth > min_depth.
       4. Lọc theo kích thước ảnh image_shape[:2] = (H, W).
     """
-    raise NotImplementedError("TODO(CP2): cài đặt cam_to_image")
+    N = len(points_cam)
+    if N == 0:
+        return np.empty((0, 2), dtype=float), np.empty((0,), dtype=float), np.zeros((0,), dtype=bool)
+
+    # 1. Lọc điểm không hợp lệ (NaN/Inf)
+    valid_finite = np.isfinite(points_cam).all(axis=1)
+
+    # 2. Toạ độ đồng nhất và nhân P2 (3x4) -> [s*u, s*v, s]
+    pts_hom = np.hstack([points_cam, np.ones((N, 1), dtype=points_cam.dtype)])
+    pts_2d_hom = (P2 @ pts_hom.T).T
+
+    # 3. Lọc theo depth > min_depth trước khi chia cho s
+    depth = points_cam[:, 2]
+    valid_depth = valid_finite & (depth > min_depth) & (pts_2d_hom[:, 2] > min_depth)
+
+    u = np.full(N, -1.0, dtype=float)
+    v = np.full(N, -1.0, dtype=float)
+    u[valid_depth] = pts_2d_hom[valid_depth, 0] / pts_2d_hom[valid_depth, 2]
+    v[valid_depth] = pts_2d_hom[valid_depth, 1] / pts_2d_hom[valid_depth, 2]
+
+    # 4. Lọc theo kích thước ảnh image_shape[:2] = (H, W)
+    H, W = image_shape[:2]
+    in_image = valid_depth & (u >= 0) & (u < W) & (v >= 0) & (v < H)
+
+    uv = np.stack([u[in_image], v[in_image]], axis=1)
+    depth_out = depth[in_image]
+    mask = in_image
+    return uv, depth_out, mask
 
 
 def project_velo_to_image(points: np.ndarray, calib: KittiCalib, image_shape: tuple[int, ...]):
