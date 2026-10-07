@@ -1,0 +1,3 @@
+Dataset,Sensor,Total_LiDAR_Points,Points_in_FOV,FOV_Percentage,Camera_Resolution,Key_Observation
+KITTI 3D Object,Velodyne HDL-64E (64 beams),108004,19946,18.5,1242x375,"Mật độ cao (~108k điểm), nhận diện rõ viền xe, ít trôi điểm khi yaw nhỏ"
+nuScenes v1.0-mini,32-beam LiDAR,34720,3120,9.0,1600x900,"Mật độ thưa hơn (~35k điểm), cần bù chuyển động xe (ego-motion) giữa timestamp"

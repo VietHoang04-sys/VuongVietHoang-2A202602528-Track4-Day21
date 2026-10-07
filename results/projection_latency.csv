@@ -1,0 +1,2 @@
+dataset,num_points,iterations,p50_latency_ms,p95_latency_ms,mean_latency_ms,std_latency_ms,min_latency_ms,max_latency_ms,fps_throughput
+KITTI-64beam,108004,30,5.67,8.309,5.896,1.148,4.377,8.854,176.4
