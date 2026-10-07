@@ -1,22 +1,21 @@
-# Báo cáo Day 6: [ĐIỀN tên đề tài ngắn]
+# Báo cáo Day 6: Đánh giá độ nhạy LiDAR-Camera Projection với Calibration Drift
 
 > Thay **mọi** ô có chữ ĐIỀN nằm trong ngoặc vuông bằng nội dung của bạn, xoá luôn cả dấu ngoặc vuông. Lệnh `python tools/check_submission.py` sẽ báo FAIL nếu còn sót bất kỳ chỗ nào.
 
-- **Họ tên:** [ĐIỀN]
-- **MSSV:** [ĐIỀN] (phải trùng với MSSV trong tên repo `<HoVaTen>-<MSSV>-Track4-Day21`)
-- **Lớp:** [ĐIỀN]
-- **Link repo:** [ĐIỀN]
-- **Topic:** [ĐIỀN một chữ cái A/B/C/D/E/F] — [ĐIỀN tên topic]
-- **Dataset:** [ĐIỀN một hoặc nhiều trong: data/synthetic, data/kitti_mini, data/nuscenes_mini_subset, log riêng]
-- **Các frame đã dùng:** [ĐIỀN danh sách frame id, ví dụ 000011, 000049 hoặc scene-0103_010]
+- **Họ tên:** Vương Việt Hoàng
+- **MSSV:** 2A202602528
+- **Lớp:** AI20K - Track 4
+- **Link repo:** https://github.com/VietHoang04-sys/VuongVietHoang-2A202602528-Track4-Day21
+- **Topic:** A — LiDAR-camera projection QA
+- **Dataset:** data/synthetic, data/kitti_mini, data/nuscenes_mini_subset
+- **Các frame đã dùng:** 000000, 000011, scene-0103_010
 
 > Hãy viết ngắn: mỗi mục từ 3 đến 8 dòng, ưu tiên số liệu và hình ảnh.
 
 ## 1. Claim
 
-Một câu khẳng định kỹ thuật có thể kiểm chứng. Ví dụ: *"Lệch yaw 1° làm 12% điểm LiDAR rơi ra khỏi vật thể ở 30 m, phát hiện được bằng edge-alignment score với ngưỡng X."*
+Độ lệch góc xoay extrinsic (yaw drift) từ 1.0° trở lên khiến tỷ lệ điểm LiDAR chiếu trúng vào 2D bounding box của xe giảm trên 25% ở cự ly trung bình (15–30 m) và sụt giảm trên 60% ở cự ly xa (>30 m), dẫn đến hiện tượng trượt điểm (mismatch) nghiêm trọng giữa điểm 3D và đối tượng 2D trên ảnh camera.
 
-[ĐIỀN]
 
 ## 2. Evidence
 
